@@ -8,5 +8,34 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    id:{
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
+
+    // resumen del plato
+    dishSummary: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    // ahora el paso a paso
+    step:{
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    image:{
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    // mas facil acceder a las recetas que creamos en la base de datos
+    createInDb:{
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    }
   });
 };
