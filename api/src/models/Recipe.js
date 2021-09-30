@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
     },
 
     // resumen del plato
-    dishSummary: {
+    summary: {
       type: DataTypes.STRING,
       allowNull: false,
     },
