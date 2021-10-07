@@ -5,6 +5,7 @@ module.exports = (sequelize) => {
     sequelize.define("Diets", {
         name: {
             type: DataTypes.STRING,
+            unique: true,
             allowNull: false,
           },
     })
