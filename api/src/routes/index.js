@@ -4,6 +4,7 @@ const { Router } = require('express');
 const axios = require ('axios'); 
 
 const {Recipe, Diets} = require('../db');
+const { getTypes } = require('../Controlers/Types');
 
 
 
@@ -16,7 +17,7 @@ const router = Router();
 //getRecipesNames() cambiar ese por getRecipeInfo()
 //buscar todos los getRecipesNames()
 const getRecipeInfo = async () =>{
-  const urlApi = await axios.get("https://api.spoonacular.com/recipes/complexSearch?apiKey=23f13ab1972645b0ade546e7b498e1ca&addRecipeInformation=true&number=100")
+  const urlApi = await axios.get("https://api.spoonacular.com/recipes/complexSearch?apiKey=afef0744d2bf4e5fb25ebd2cbce223d2&addRecipeInformation=true&number=100")
     const infoApi = await urlApi.data.results.map(i =>{
         return {
             id: i.id,
@@ -66,7 +67,7 @@ router.get("/recipes", async (req, res) =>{
 
 router.get("/recipes/:id", async (req, res) =>{
     const id = req.params.id;
-    const infoApi = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=23f13ab1972645b0ade546e7b498e1ca`);
+    const infoApi = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=afef0744d2bf4e5fb25ebd2cbce223d2`);
     const recipeInfo = await getRecipeInfo()
     if(id){
         let recipeId = await recipeInfo.filter(e => e.id == id)
@@ -77,22 +78,9 @@ router.get("/recipes/:id", async (req, res) =>{
 
 })
 
-router.get("/types", async (req, res) => {
-    const typesUrl = await axios.get("https://api.spoonacular.com/recipes/complexSearch?apiKey=23f13ab1972645b0ade546e7b498e1ca&addRecipeInformation=true&number=100");
-    const typesApi = typesUrl.data.results.map(el =>{if(el.diets.length === 0)return el.diets=["vegan"]; else return el.diets})
-    let array = []
-    const dietEach = typesApi.map(diet => {
-        for (let i = 0; i<diet.length; i++)array.push(diet[i])
-    })
-    console.log("esto viene de la API")
-
-    array.forEach(diet => {
-        Diets.findOrCreate({
-            where: {name: diet}
-        })
-    })
-    const allDiets = await Diets.findAll();
-    res.send(allDiets)
+router.get("/types", async (req, res) =>{
+    let types = await getTypes()
+    res.send(types)
 })
 
 router.post("/recipe", async (req, res) => {
@@ -103,6 +91,7 @@ router.post("/recipe", async (req, res) => {
             title,
             image,
             summary,
+            steps,
             diets,
             createInDb,
         })
