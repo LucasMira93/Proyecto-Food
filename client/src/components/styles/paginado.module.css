@@ -1,0 +1,6 @@
+ul.paginado{
+    display: flex;
+    justify-content: space-around;
+    cursor: pointer;
+    align-items: flex-start;
+}
